@@ -1,0 +1,64 @@
+---
+layout: default
+title: 공지사항
+---
+
+<div class="container">
+  <h1>공지사항</h1>
+  
+  <div class="notices-list">
+    {% for notice in site.notices reversed %}
+      <div class="notice-item">
+        <div class="notice-header">
+          <h2><a href="{{ notice.url | relative_url }}">{{ notice.title }}</a></h2>
+          <p class="notice-date">{{ notice.date | date: "%Y년 %m월 %d일" }}</p>
+        </div>
+        {% if notice.excerpt %}
+          <div class="notice-excerpt">
+            {{ notice.excerpt }}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+.notices-list {
+  margin-top: 2rem;
+}
+
+.notice-item {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5rem 0;
+}
+
+.notice-item:last-child {
+  border-bottom: none;
+}
+
+.notice-header h2 {
+  margin: 0 0 0.5rem 0;
+}
+
+.notice-header h2 a {
+  text-decoration: none;
+  color: #333;
+}
+
+.notice-header h2 a:hover {
+  color: #0066cc;
+}
+
+.notice-date {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.notice-excerpt {
+  margin-top: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+</style>
