@@ -1,0 +1,982 @@
+/* =============================================
+   모두의티켓 - 최적화된 CSS
+   원본 HTML의 인라인 스타일을 외부 파일로 분리
+   ============================================= */
+
+/* Services Section - 사이버펑크 스타일 */
+.services {
+  padding: 80px 20px;
+  background: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 배경 애니메이션 */
+.services::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 10% 50%, rgba(131, 56, 236, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 90% 50%, rgba(6, 255, 180, 0.1) 0%, transparent 50%);
+  animation: breathe 8s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.services .section-title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 70px;
+  color: #333333;
+  position: relative;
+  z-index: 2;
+  padding: 10px 0;
+  display: inline-block;
+  width: 100%;
+}
+
+.services .section-subtitle {
+  text-align: center;
+  font-size: 20px;
+  color: #B8BCC8;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+/* 서비스 카드 공통 스타일 */
+.service-card {
+  background: #1E2341;
+  border-radius: 20px;
+  padding: 35px 25px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 카드별 그라데이션 테두리 */
+.mobile-payment {
+  background-image: 
+    linear-gradient(#1E2341, #1E2341),
+    linear-gradient(135deg, #FF006E, #8338EC);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.game-payment {
+  background-image: 
+    linear-gradient(#1E2341, #1E2341),
+    linear-gradient(135deg, #8338EC, #3A86FF);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.credit-payment {
+  background-image: 
+    linear-gradient(#1E2341, #1E2341),
+    linear-gradient(135deg, #3A86FF, #06FFB4);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* 카드 글로우 효과 */
+.card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.mobile-payment .card-glow {
+  background: radial-gradient(circle, rgba(255, 0, 110, 0.4) 0%, transparent 70%);
+}
+
+.game-payment .card-glow {
+  background: radial-gradient(circle, rgba(131, 56, 236, 0.4) 0%, transparent 70%);
+}
+
+.credit-payment .card-glow {
+  background: radial-gradient(circle, rgba(6, 255, 180, 0.4) 0%, transparent 70%);
+}
+
+.service-card:hover .card-glow {
+  opacity: 1;
+}
+
+.service-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-payment:hover {
+  box-shadow: 0 20px 40px rgba(255, 0, 110, 0.3);
+}
+
+.game-payment:hover {
+  box-shadow: 0 20px 40px rgba(131, 56, 236, 0.3);
+}
+
+.credit-payment:hover {
+  box-shadow: 0 20px 40px rgba(6, 255, 180, 0.3);
+}
+
+/* 아이콘 스타일 */
+.service-card .card-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  position: relative;
+}
+
+.mobile-payment .card-icon {
+  background: linear-gradient(135deg, rgba(255, 0, 110, 0.2), rgba(131, 56, 236, 0.2));
+  color: #FF006E;
+  box-shadow: 0 0 25px rgba(255, 0, 110, 0.3);
+}
+
+.game-payment .card-icon {
+  background: linear-gradient(135deg, rgba(131, 56, 236, 0.2), rgba(58, 134, 255, 0.2));
+  color: #8338EC;
+  box-shadow: 0 0 25px rgba(131, 56, 236, 0.3);
+}
+
+.credit-payment .card-icon {
+  background: linear-gradient(135deg, rgba(58, 134, 255, 0.2), rgba(6, 255, 180, 0.2));
+  color: #06FFB4;
+  box-shadow: 0 0 25px rgba(6, 255, 180, 0.3);
+}
+
+.service-card .card-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* 특징 태그 */
+.card-features {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.feature-tag {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #B8BCC8;
+}
+
+.service-card .card-desc {
+  font-size: 15px;
+  color: #B8BCC8;
+  line-height: 1.8;
+  text-align: center;
+  margin-bottom: auto;
+}
+
+/* 카드 배지 */
+.card-badge {
+  margin-top: 20px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.card-badge-link {
+  text-decoration: none;
+}
+
+.mobile-payment .card-badge {
+  background: rgba(255, 0, 110, 0.1);
+  color: #FF006E;
+  border: 1px solid rgba(255, 0, 110, 0.3);
+}
+
+.game-payment .card-badge {
+  background: rgba(131, 56, 236, 0.1);
+  color: #8338EC;
+  border: 1px solid rgba(131, 56, 236, 0.3);
+}
+
+.credit-payment .card-badge {
+  background: rgba(6, 255, 180, 0.1);
+  color: #06FFB4;
+  border: 1px solid rgba(6, 255, 180, 0.3);
+}
+
+.badge-icon {
+  font-size: 16px;
+}
+
+/* 하단 배너 */
+.service-banner {
+  background: #1E2341;
+  border-radius: 20px;
+  padding: 30px;
+  border: 2px solid transparent;
+  background-image: 
+    linear-gradient(#1E2341, #1E2341),
+    linear-gradient(90deg, #FF006E, #8338EC, #3A86FF, #06FFB4);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+}
+
+.banner-text {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 16px;
+  color: #B8BCC8;
+}
+
+.banner-highlight {
+  color: #06FFB4;
+  font-weight: 700;
+  margin-right: 10px;
+}
+
+.banner-stats {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #06FFB4, #3A86FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #B8BCC8;
+}
+
+/* Contact Section 스타일 */
+.contact {
+  padding: 100px 20px;
+  margin-bottom: 100px;
+  background: var(--dark-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 20% 50%, 
+    rgba(255, 0, 110, 0.1) 0%, 
+    transparent 50%),
+    radial-gradient(circle at 80% 50%, 
+    rgba(58, 134, 255, 0.1) 0%, 
+    transparent 50%);
+  animation: rotateGradient 20s linear infinite;
+}
+
+@keyframes rotateGradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.contact .section-title {
+  text-align: center;
+  font-size: 48px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #06FFB4, #3A86FF, #8338EC);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 30px rgba(6, 255, 180, 0.5));
+  position: relative;
+  z-index: 2;
+}
+
+.contact .section-subtitle {
+  text-align: center;
+  font-size: 20px;
+  color: #B8BCC8;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.contact-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.contact-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.contact-card {
+  background: #1E2341;
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.phone-card {
+  background-image: 
+    linear-gradient(#1E2341, #1E2341),
+    linear-gradient(135deg, #FF006E, #8338EC);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.kakao-card {
+  background-image: 
+    linear-gradient(#1E2341, #1E2341),
+    linear-gradient(135deg, #06FFB4, #3A86FF);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.contact-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.phone-card:hover {
+  box-shadow: 0 20px 40px rgba(255, 0, 110, 0.3);
+}
+
+.kakao-card:hover {
+  box-shadow: 0 20px 40px rgba(6, 255, 180, 0.3);
+}
+
+.contact-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1));
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.contact-card:hover::before {
+  opacity: 1;
+}
+
+.contact-card .card-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: relative;
+}
+
+.phone-card .card-icon {
+  background: linear-gradient(135deg, #FF006E, #8338EC);
+  color: white;
+  box-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+}
+
+.kakao-card .card-icon {
+  background: linear-gradient(135deg, #06FFB4, #3A86FF);
+  color: #0A0E27;
+  box-shadow: 0 0 30px rgba(6, 255, 180, 0.5);
+}
+
+.contact-card .card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+.contact-card .card-desc {
+  font-size: 15px;
+  color: #B8BCC8;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.card-number {
+  font-size: 28px;
+  font-weight: 900;
+  margin-bottom: 30px;
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.phone-card .card-number {
+  color: #FF006E;
+  text-shadow: 0 0 20px rgba(255, 0, 110, 0.5);
+}
+
+.kakao-card .card-number {
+  color: #06FFB4;
+  text-shadow: 0 0 20px rgba(6, 255, 180, 0.5);
+}
+
+.card-button {
+  display: inline-block;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-button span {
+  position: relative;
+  z-index: 1;
+}
+
+.card-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+
+.card-button:hover::before {
+  width: 300px;
+  height: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.phone-button {
+  background: linear-gradient(135deg, #FF006E, #8338EC);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 0, 110, 0.4);
+}
+
+.phone-button::before {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.phone-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 0, 110, 0.6);
+}
+
+.kakao-button {
+  background: linear-gradient(135deg, #06FFB4, #3A86FF);
+  color: #0A0E27;
+  box-shadow: 0 4px 15px rgba(6, 255, 180, 0.4);
+}
+
+.kakao-button::before {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.kakao-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(6, 255, 180, 0.6);
+}
+
+/* 운영시간 정보 */
+.operation-info {
+  text-align: center;
+  padding: 30px;
+  background: #1E2341;
+  border-radius: 15px;
+  border: 1px solid rgba(131, 56, 236, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: rgba(6, 255, 180, 0.1);
+  border: 1px solid #06FFB4;
+  border-radius: 50px;
+  color: #06FFB4;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  background: #06FFB4;
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.info-text {
+  color: #B8BCC8;
+  font-size: 16px;
+}
+
+/* FAQ & Info Section */
+.faq-info-section {
+  padding: 80px 20px;
+  background: #f8f9fa;
+}
+
+.faq-info-section .h2.textset-tit {
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.content-column {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.column-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #667eea;
+}
+
+.faq-item, .info-item {
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s;
+}
+
+.faq-item:hover, .info-item:hover {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.faq-question, .info-title {
+  padding: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.faq-toggle, .info-toggle {
+  font-size: 16px;
+  transition: transform 0.3s;
+  color: #999;
+}
+
+.faq-item.active .faq-toggle,
+.info-item.active .info-toggle {
+  transform: rotate(45deg);
+  color: #667eea;
+}
+
+.faq-answer, .info-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s;
+  background: white;
+}
+
+.faq-item.active .faq-answer,
+.info-item.active .info-content {
+  max-height: 300px;
+}
+
+.faq-answer-content, .info-answer-content {
+  padding: 15px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.column-more {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btn-more {
+  display: inline-block;
+  padding: 10px 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s;
+  box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+/* 플로팅 배너 */
+.floating-banner {
+  position: fixed;
+  right: 20px;
+  bottom: 160px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.float-btn {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.float-btn:hover {
+  transform: translateX(-5px);
+  filter: brightness(1.1);
+}
+
+.float-btn-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 6px;
+  fill: white;
+}
+
+.float-btn-text {
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.btn-phone {
+  background: linear-gradient(135deg, #26D0CE 0%, #1A9D95 100%);
+  border-radius: 15px 15px 0 0;
+}
+
+.btn-kakao {
+  background: linear-gradient(135deg, #FFE812 0%, #FFC700 100%);
+}
+
+.btn-kakao .float-btn-text {
+  color: #3C1E1E;
+}
+
+.btn-kakao .float-btn-icon {
+  fill: #3C1E1E;
+}
+
+.btn-bookmark {
+  background: linear-gradient(135deg, #FF9F43 0%, #FF6B3D 100%);
+  border-radius: 0 0 15px 15px;
+}
+
+.btn-top {
+  background: linear-gradient(135deg, #26D0CE 0%, #1A9D95 100%);
+  border-radius: 20%;
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  right: 45px;
+  bottom: 20px;
+}
+
+.top-arrow-icon {
+  width: 40px;
+  height: 40px;
+  fill: white;
+}
+
+/* 섹션별 여백 조정 */
+.h2.textset-tit {
+  text-align: center;
+}
+
+/* 이미지 필터 */
+picture img {
+  filter: brightness(0.7);
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .services .section-title {
+    font-size: 28px;
+    margin-bottom: 40px !important;
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .service-card {
+    min-height: auto;
+  }
+  
+  .banner-stats {
+    gap: 30px;
+  }
+  
+  .stat-number {
+    font-size: 22px;
+  }
+  
+  .services {
+    padding-top: 40px;
+    padding-bottom: 60px;
+  }
+  
+  .contact .section-title {
+    font-size: 36px;
+  }
+  
+  .contact-cards {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .contact-card {
+    padding: 30px 20px;
+  }
+  
+  .card-number {
+    font-size: 22px;
+  }
+  
+  .card-button {
+    padding: 12px 30px;
+    font-size: 14px;
+  }
+  
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .content-column {
+    padding: 20px;
+  }
+  
+  .column-title {
+    font-size: 20px;
+  }
+  
+  .faq-info-section h2.h2.textset-tit {
+    margin-top: -30px !important;
+    margin-bottom: 40px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  
+  .floating-banner {
+    right: 10px;
+    bottom: 70px;
+  }
+
+  .float-btn {
+    width: 75px;
+    height: 75px;
+  }
+
+  .btn-top {
+    width: 48px;
+    height: 48px;
+    right: 20px;
+    bottom: 15px;
+  }
+
+  .float-btn-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .top-arrow-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .float-btn-text {
+    font-size: 12px;
+  }
+}
+
+/* PC에서만 적용 */
+@media (min-width: 769px) {
+  .basic-N57 h2.textset-tit {
+    margin-top: -5px !important;
+    margin-bottom: -25px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  
+  .basic-N57 {
+    padding-bottom: 100px !important;
+  }
+  
+  .basic-N9 {
+    padding-bottom: 100px !important;
+  }
+  
+  .faq-info-section {
+    margin-bottom: 10px;
+    padding-bottom: 90px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .basic-N57 {
+    padding-top: 40px !important;
+    padding-bottom: 70px !important;
+  }
+  
+  .basic-N9 {
+    padding-bottom: 60px !important;
+  }
+}
+
+/* 부드러운 스크롤 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 추가 애니메이션과 전환 효과 */
+* {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+a {
+  transition: all 0.3s ease;
+}
+
+button {
+  transition: all 0.3s ease;
+}
