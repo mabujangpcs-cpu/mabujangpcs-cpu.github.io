@@ -1,0 +1,16 @@
+title: 모두의티켓
+description: 공지사항 페이지
+baseurl: ""
+url: "https://mabujangpcs-cpu.github.io"
+
+collections:
+  notices:
+    output: true
+    permalink: /notices/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: notices
+    values:
+      layout: notice
