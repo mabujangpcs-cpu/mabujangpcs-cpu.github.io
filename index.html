@@ -1,0 +1,89 @@
+---
+layout: default
+---
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 - 모두의티켓</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        .notice-list {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .notice-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s;
+        }
+        .notice-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .notice-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .notice-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .notice-summary {
+            color: #555;
+            line-height: 1.6;
+        }
+        .admin-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="notice-list">
+        <h1>공지사항</h1>
+        
+        {% for notice in site.notices reversed %}
+        {% if notice.published %}
+        <div class="notice-item">
+            <h2 class="notice-title">{{ notice.title }}</h2>
+            <div class="notice-meta">
+                {{ notice.date | date: "%Y년 %m월 %d일" }} | {{ notice.author }}
+            </div>
+            <div class="notice-summary">
+                {{ notice.summary }}
+            </div>
+            <a href="{{ notice.url }}">자세히 보기 →</a>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    
+    <a href="/admin" class="admin-btn">관리자</a>
+
+    <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+    </script>
+</body>
+</html>
