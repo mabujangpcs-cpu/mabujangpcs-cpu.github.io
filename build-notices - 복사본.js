@@ -52,8 +52,7 @@ async function buildNotices() {
             title: frontMatter.title || '제목 없음',
             date: frontMatter.date || '2025-09-09',
             author: frontMatter.author || '관리자',
-            summary: frontMatter.summary || frontMatter.description || '공지사항입니다',
-            category: frontMatter.category || '공지'
+            summary: frontMatter.summary || frontMatter.description || '공지사항입니다'
         };
         
         // 파일명에서 ID 추출 (확장자 제거)
@@ -61,21 +60,16 @@ async function buildNotices() {
         
         console.log(`📄 제목: ${metadata.title}`);
         console.log(`📅 날짜: ${metadata.date}`);
-        console.log(`📂 카테고리: ${metadata.category}`);
-        
-        // 마크다운을 HTML로 변환 (간단한 변환)
-        const htmlContent = markdownToHtml(body);
         
         // HTML 생성
         let html = template;
         const replacements = {
             '{{NOTICE_TITLE}}': metadata.title,
             '{{NOTICE_SUMMARY}}': metadata.summary,
-            '{{NOTICE_CONTENT_HTML}}': htmlContent,
+            '{{NOTICE_CONTENT_HTML}}': body.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>'),
             '{{NOTICE_DATE}}': metadata.date,
             '{{NOTICE_DATE_FORMATTED}}': formatDate(metadata.date),
             '{{NOTICE_AUTHOR}}': metadata.author,
-            '{{NOTICE_CATEGORY}}': metadata.category,
             '{{NOTICE_URL}}': `notice-${fileId}.html`
         };
         
@@ -90,52 +84,6 @@ async function buildNotices() {
     });
     
     console.log('\n✨ 빌드 완료!');
-}
-
-function markdownToHtml(markdown) {
-    return markdown
-        // 헤더 변환
-        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-        
-        // 굵게, 기울임, 밑줄 변환
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/__(.*?)__/g, '<strong>$1</strong>')
-        .replace(/_(.*?)_/g, '<em>$1</em>')
-        
-        // 링크 변환
-        .replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-        
-        // 이미지 변환
-        .replace(/!\[([^\]]*)\]\(([^\)]+)\)/g, '<img src="$2" alt="$1" class="img-center img-full">')
-        
-        // 인용구 변환
-        .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
-        
-        // 코드 블록 변환
-        .replace(/```([^`]+)```/g, '<pre><code>$1</code></pre>')
-        .replace(/`([^`]+)`/g, '<code>$1</code>')
-        
-        // 목록 변환
-        .replace(/^\* (.*$)/gim, '<li>$1</li>')
-        .replace(/^(\d+)\. (.*$)/gim, '<li>$1. $2</li>')
-        
-        // 줄바꿈 변환
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/\n/g, '<br>')
-        
-        // 단락으로 감싸기
-        .replace(/^(?!<[hl]|<blockquote|<pre|<li)(.+)/gm, '<p>$1</p>')
-        
-        // 연속된 태그 정리
-        .replace(/<\/p><p><\/p><p>/g, '</p><p>')
-        .replace(/<p><\/p>/g, '')
-        .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-        
-        // HTML 정리
-        .trim();
 }
 
 function formatDate(dateString) {
