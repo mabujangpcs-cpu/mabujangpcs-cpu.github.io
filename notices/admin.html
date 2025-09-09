@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 관리자 패널</title>
+    <!-- Quill.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 700px;
+        }
+        
+        .form-section {
+            padding: 40px;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+            overflow-y: auto;
+            max-height: 700px;
+        }
+        
+        .preview-section {
+            padding: 40px;
+            background: white;
+            overflow-y: auto;
+            max-height: 700px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+        
+        /* Quill 에디터 스타일 */
+        .editor-container {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .editor-container:focus-within {
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+        
+        #editor {
+            min-height: 300px;
+        }
+        
+        .ql-toolbar {
+            border: none !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            padding: 15px !important;
+            background: #f8fafc;
+        }
+        
+        .ql-container {
+            border: none !important;
+            font-family: inherit !important;
+            font-size: 1rem !important;
+        }
+        
+        .ql-editor {
+            padding: 20px !important;
+            min-height: 280px;
+        }
+        
+        /* 이미지 업로드 영역 */
+        .image-upload {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+        }
+        
+        .image-upload:hover {
+            border-color: #4facfe;
+            background: #ebf8ff;
+        }
+        
+        .image-upload.dragover {
+            border-color: #4facfe;
+            background: #ebf8ff;
+            transform: scale(1.02);
+        }
+        
+        .image-upload input {
+            display: none;
+        }
+        
+        .image-preview {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .image-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .image-item img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        
+        .image-item .info {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+        
+        .image-item .controls {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .image-item button {
+            padding: 4px 8px;
+            border: 1px solid #cbd5e0;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+            transform: translateY(-1px);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .preview-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s ease;
+        }
+        
+        .preview-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .preview-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+        
+        .preview-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+        
+        .preview-content {
+            line-height: 1.7;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+        
+        /* 미리보기에서 이미지 스타일 */
+        .preview-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .notice-list {
+            margin-top: 40px;
+        }
+        
+        .notice-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .notice-item:hover {
+            border-color: #4facfe;
+            transform: translateX(5px);
+        }
+        
+        .notice-item h3 {
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .notice-item .meta {
+            color: #718096;
+            font-size: 0.85rem;
+        }
+        
+        .status-message {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .status-success {
+            background: #d4f7d4;
+            color: #2d7738;
+            border: 2px solid #84d187;
+        }
+        
+        .status-error {
+            background: #fed7d7;
+            color: #c53030;
+            border: 2px solid #fc8181;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .modal input, .modal select {
+            margin-bottom: 15px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-section {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+                max-height: none;
+            }
+            
+            .preview-section {
+                max-height: none;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 고급 공지사항 관리자</h1>
+            <p>리치 텍스트 에디터로 전문적인 공지사항을 작성하세요</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="form-section">
+                <h2 class="section-title">새 공지사항 작성</h2>
+                
+                <form id="noticeForm">
+                    <div class="form-group">
+                        <label for="title">제목</label>
+                        <input type="text" id="title" name="title" placeholder="공지사항 제목을 입력하세요" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="summary">요약</label>
+                        <input type="text" id="summary" name="summary" placeholder="간단한 요약을 입력하세요" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="author">작성자</label>
+                        <input type="text" id="author" name="author" value="관리자" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">카테고리</label>
+                        <select id="category" name="category">
+                            <option value="공지">공지</option>
+                            <option value="이벤트">이벤트</option>
+                            <option value="업데이트">업데이트</option>
+                            <option value="안내">안내</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>이미지 업로드</label>
+                        <div class="image-upload" onclick="document.getElementById('imageInput').click()">
+                            <input type="file" id="imageInput" accept="image/*" multiple>
+                            <div>
+                                <strong>클릭하거나 이미지를 드래그하여 업로드</strong>
+                                <br>
+                                <small>JPG, PNG, GIF 파일 지원</small>
+                            </div>
+                        </div>
+                        <div id="imagePreview" class="image-preview"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>내용</label>
+                        <div class="editor-container">
+                            <div id="editor"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="previewNotice()">
+                            👁️ 미리보기
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="generateNotice()">
+                            ✨ 공지사항 생성
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="statusMessage" class="hidden"></div>
+            </div>
+            
+            <div class="preview-section">
+                <h2 class="section-title">미리보기</h2>
+                
+                <div id="previewCard" class="preview-card">
+                    <div class="preview-title" id="previewTitle">제목을 입력하세요</div>
+                    <div class="preview-meta">
+                        <span>📅 <span id="previewDate">2025년 9월 9일</span></span>
+                        <span>👤 <span id="previewAuthor">관리자</span></span>
+                        <span>📂 <span id="previewCategory">공지</span></span>
+                    </div>
+                    <div class="preview-content" id="previewContent">
+                        내용을 입력하면 여기에 미리보기가 표시됩니다.
+                    </div>
+                </div>
+                
+                <div class="notice-list">
+                    <h3 style="margin-bottom: 15px; color: #2d3748;">📋 생성된 공지사항</h3>
+                    <div id="noticeList">
+                        <div class="notice-item">
+                            <p style="text-align: center; color: #718096;">
+                                생성된 공지사항이 여기에 표시됩니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 이미지 설정 모달 -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <h3>이미지 설정</h3>
+            <input type="text" id="modalAltText" placeholder="Alt 텍스트 (접근성)">
+            <input type="text" id="modalCaption" placeholder="이미지 캡션 (선택사항)">
+            <select id="modalSize">
+                <option value="small">작게 (25%)</option>
+                <option value="medium" selected>보통 (50%)</option>
+                <option value="large">크게 (75%)</option>
+                <option value="full">전체 (100%)</option>
+            </select>
+            <select id="modalAlign">
+                <option value="left">왼쪽 정렬</option>
+                <option value="center" selected>가운데 정렬</option>
+                <option value="right">오른쪽 정렬</option>
+            </select>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeImageModal()">취소</button>
+                <button class="btn btn-primary" onclick="insertImage()">삽입</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quill.js JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+    
+    <script>
+        // Quill 에디터 초기화
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'align': [] }],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['blockquote', 'code-block'],
+                    ['link'],
+                    ['clean']
+                ]
+            },
+            placeholder: '내용을 입력하세요...'
+        });
+
+        let uploadedImages = [];
+        let currentImageData = null;
+        
+        // 실시간 미리보기
+        document.getElementById('title').addEventListener('input', previewNotice);
+        document.getElementById('summary').addEventListener('input', previewNotice);
+        document.getElementById('author').addEventListener('input', previewNotice);
+        document.getElementById('category').addEventListener('change', previewNotice);
+        quill.on('text-change', previewNotice);
+        
+        // 이미지 업로드 처리
+        document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+        
+        // 드래그 앤 드롭 처리
+        const uploadArea = document.querySelector('.image-upload');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+        
+        function handleImageUpload(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+        
+        function handleFiles(files) {
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const imageData = {
+                            id: Date.now() + Math.random(),
+                            src: e.target.result,
+                            name: file.name,
+                            size: file.size,
+                            type: file.type,
+                            altText: '',
+                            caption: '',
+                            displaySize: 'medium',
+                            align: 'center'
+                        };
+                        
+                        uploadedImages.push(imageData);
+                        displayImagePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+        
+        function displayImagePreview() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = uploadedImages.map(img => `
+                <div class="image-item">
+                    <img src="${img.src}" alt="${img.altText || img.name}">
+                    <div class="info">
+                        <div>${img.name}</div>
+                        <small>${(img.size / 1024).toFixed(1)}KB</small>
+                        ${img.altText ? `<div><small>Alt: ${img.altText}</small></div>` : ''}
+                    </div>
+                    <div class="controls">
+                        <button type="button" onclick="configureImage('${img.id}')">설정</button>
+                        <button type="button" onclick="insertImageToEditor('${img.id}')">삽입</button>
+                        <button type="button" onclick="removeImage('${img.id}')">삭제</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function configureImage(imageId) {
+            const image = uploadedImages.find(img => img.id == imageId);
+            if (image) {
+                currentImageData = image;
+                document.getElementById('modalAltText').value = image.altText;
+                document.getElementById('modalCaption').value = image.caption;
+                document.getElementById('modalSize').value = image.displaySize;
+                document.getElementById('modalAlign').value = image.align;
+                document.getElementById('imageModal').style.display = 'block';
+            }
+        }
+        
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+            currentImageData = null;
+        }
+        
+        function insertImage() {
+            if (currentImageData) {
+                currentImageData.altText = document.getElementById('modalAltText').value;
+                currentImageData.caption = document.getElementById('modalCaption').value;
+                currentImageData.displaySize = document.getElementById('modalSize').value;
+                currentImageData.align = document.getElementById('modalAlign').value;
+                
+                insertImageToEditor(currentImageData.id);
+                displayImagePreview(); // 업데이트된 정보로 미리보기 갱신
+            }
+            closeImageModal();
+        }
+        
+        function insertImageToEditor(imageId) {
+            const image = uploadedImages.find(img => img.id == imageId);
+            if (image) {
+                const sizeMap = {
+                    'small': '25%',
+                    'medium': '50%',
+                    'large': '75%',
+                    'full': '100%'
+                };
+                
+                const width = sizeMap[image.displaySize];
+                const range = quill.getSelection();
+                
+                let imageHtml = `<div style="text-align: ${image.align}; margin: 15px 0;">`;
+                imageHtml += `<img src="${image.src}" alt="${image.altText}" style="width: ${width}; max-width: 100%; height: auto; border-radius: 8px;">`;
+                if (image.caption) {
+                    imageHtml += `<div style="font-size: 0.9em; color: #666; margin-top: 5px; font-style: italic;">${image.caption}</div>`;
+                }
+                imageHtml += `</div>`;
+                
+                quill.clipboard.dangerouslyPasteHTML(range ? range.index : 0, imageHtml);
+            }
+        }
+        
+        function removeImage(imageId) {
+            uploadedImages = uploadedImages.filter(img => img.id != imageId);
+            displayImagePreview();
+        }
+        
+        function previewNotice() {
+            const title = document.getElementById('title').value || '제목을 입력하세요';
+            const author = document.getElementById('author').value || '관리자';
+            const category = document.getElementById('category').value || '공지';
+            const content = quill.root.innerHTML || '내용을 입력하면 여기에 미리보기가 표시됩니다.';
+            
+            document.getElementById('previewTitle').textContent = title;
+            document.getElementById('previewAuthor').textContent = author;
+            document.getElementById('previewCategory').textContent = category;
+            document.getElementById('previewContent').innerHTML = content;
+            
+            // 현재 날짜 설정
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+            document.getElementById('previewDate').textContent = dateStr;
+        }
+        
+        function generateNotice() {
+            const form = document.getElementById('noticeForm');
+            const formData = new FormData(form);
+            
+            // 필수 필드 검증
+            if (!formData.get('title') || quill.getLength() <= 1) {
+                showMessage('제목과 내용을 모두 입력해주세요.', 'error');
+                return;
+            }
+            
+            // 파일 ID 생성 (현재 날짜 + 랜덤)
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0];
+            const randomStr = Math.random().toString(36).substring(2, 8);
+            const fileId = `${dateStr}-${randomStr}`;
+            
+            // HTML 콘텐츠를 마크다운으로 변환 (간단한 변환)
+            const htmlContent = quill.root.innerHTML;
+            const markdownContent = htmlToMarkdown(htmlContent);
+            
+            // 마크다운 파일 내용 생성
+            const frontMatter = `---
+title: ${formData.get('title')}
+date: ${dateStr}
+author: ${formData.get('author')}
+summary: ${formData.get('summary')}
+category: ${formData.get('category')}
+---
+
+${markdownContent}`;
+            
+            // 파일 다운로드
+            downloadFile(`${fileId}.md`, frontMatter);
+            
+            // 생성된 공지사항을 목록에 추가
+            addNoticeToList({
+                id: fileId,
+                title: formData.get('title'),
+                author: formData.get('author'),
+                category: formData.get('category'),
+                date: dateStr
+            });
+            
+            // 성공 메시지
+            showMessage('공지사항이 생성되었습니다! 다운로드된 파일을 notices 폴더에 넣고 배치파일을 실행하세요.', 'success');
+            
+            // 폼 초기화
+            form.reset();
+            quill.setContents([]);
+            uploadedImages = [];
+            displayImagePreview();
+            previewNotice();
+        }
+        
+        function htmlToMarkdown(html) {
+            // 간단한 HTML to Markdown 변환
+            return html
+                .replace(/<h1>(.*?)<\/h1>/g, '# $1\n')
+                .replace(/<h2>(.*?)<\/h2>/g, '## $1\n')
+                .replace(/<h3>(.*?)<\/h3>/g, '### $1\n')
+                .replace(/<strong>(.*?)<\/strong>/g, '**$1**')
+                .replace(/<b>(.*?)<\/b>/g, '**$1**')
+                .replace(/<em>(.*?)<\/em>/g, '*$1*')
+                .replace(/<i>(.*?)<\/i>/g, '*$1*')
+                .replace(/<u>(.*?)<\/u>/g, '_$1_')
+                .replace(/<blockquote>(.*?)<\/blockquote>/g, '> $1')
+                .replace(/<code>(.*?)<\/code>/g, '`$1`')
+                .replace(/<a href="(.*?)">(.*?)<\/a>/g, '[$2]($1)')
+                .replace(/<img src="(.*?)" alt="(.*?)"[^>]*>/g, '![$2]($1)')
+                .replace(/<br\s*\/?>/g, '\n')
+                .replace(/<p>(.*?)<\/p>/g, '$1\n\n')
+                .replace(/<div[^>]*>(.*?)<\/div>/g, '$1\n')
+                .replace(/<[^>]*>/g, '') // 나머지 HTML 태그 제거
+                .replace(/\n{3,}/g, '\n\n') // 연속된 줄바꿈 정리
+                .trim();
+        }
+        
+        function downloadFile(filename, content) {
+            const element = document.createElement('a');
+            const file = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            element.href = URL.createObjectURL(file);
+            element.download = filename;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+        
+        function addNoticeToList(notice) {
+            const noticeList = document.getElementById('noticeList');
+            
+            // 첫 번째 공지사항이면 안내 메시지 제거
+            if (noticeList.children.length === 1 && noticeList.children[0].textContent.includes('생성된 공지사항이')) {
+                noticeList.innerHTML = '';
+            }
+            
+            const noticeItem = document.createElement('div');
+            noticeItem.className = 'notice-item';
+            noticeItem.innerHTML = `
+                <h3>${notice.title}</h3>
+                <div class="meta">
+                    📅 ${notice.date} | 👤 ${notice.author} | 📂 ${notice.category} | 📄 ${notice.id}.md
+                </div>
+            `;
+            
+            noticeList.insertBefore(noticeItem, noticeList.firstChild);
+        }
+        
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('statusMessage');
+            messageElement.textContent = message;
+            messageElement.className = `status-message status-${type}`;
+            messageElement.classList.remove('hidden');
+            
+            setTimeout(() => {
+                messageElement.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeImageModal();
+            }
+        }
+        
+        // 페이지 로드 시 미리보기 초기화
+        document.addEventListener('DOMContentLoaded', previewNotice);
+    </script>
+</body>
+</html>
