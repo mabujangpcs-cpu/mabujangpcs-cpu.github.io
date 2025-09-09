@@ -8,9 +8,21 @@ collections:
     output: true
     permalink: /notices/:path/
 
+# 마크다운 설정 추가
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# 플러그인 설정 추가  
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - kramdown-parser-gfm
+
 defaults:
   - scope:
       path: ""
-      type: notices
+      type: "notices"
     values:
-      layout: notice
+      layout: "notice"
