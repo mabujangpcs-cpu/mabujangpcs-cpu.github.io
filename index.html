@@ -5,85 +5,342 @@ layout: default
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항 - 모두의티켓</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
-        .notice-list {
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .notice-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .stat-item {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        .notice-list {
+            margin-top: 40px;
+        }
         .notice-item {
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px;
             margin-bottom: 20px;
-            transition: box-shadow 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
         }
         .notice-item:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .notice-item.featured {
+            border-left: 4px solid #667eea;
+            background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+        }
+        .notice-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
         }
         .notice-title {
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 1.4rem;
+            font-weight: 600;
             color: #333;
-            margin-bottom: 10px;
+            margin: 0 0 12px 0;
+            line-height: 1.3;
+        }
+        .notice-title a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s;
+        }
+        .notice-title a:hover {
+            color: #667eea;
         }
         .notice-meta {
-            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #6c757d;
             font-size: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .notice-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         .notice-summary {
             color: #555;
             line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .read-more:hover {
+            color: #5a6fd8;
+            gap: 8px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            border: 2px dashed #dee2e6;
+        }
+        .empty-state h3 {
+            color: #6c757d;
+            margin: 0 0 10px 0;
+        }
+        .empty-state p {
+            color: #adb5bd;
+            margin: 0;
         }
         .admin-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #667eea;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
+            padding: 15px 25px;
+            border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        .search-box {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .notice-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .notice-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .admin-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="notice-list">
-        <h1>공지사항</h1>
-        
-        {% for notice in site.notices reversed %}
-        {% if notice.published %}
-        <div class="notice-item">
-            <h2 class="notice-title">{{ notice.title }}</h2>
-            <div class="notice-meta">
-                {{ notice.date | date: "%Y년 %m월 %d일" }} | {{ notice.author }}
-            </div>
-            <div class="notice-summary">
-                {{ notice.summary }}
-            </div>
-            <a href="{{ notice.url }}">자세히 보기 →</a>
+    <div class="container">
+        <div class="header">
+            <h1>📢 모두의티켓 공지사항</h1>
+            <p>최신 소식과 중요한 안내사항을 확인하세요</p>
         </div>
-        {% endif %}
-        {% endfor %}
+
+        <!-- 공지사항 통계 -->
+        <div class="notice-stats">
+            <div class="stat-item">
+                <div class="stat-number">{{ site.notices | size }}</div>
+                <div class="stat-label">전체 공지</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ site.notices | where: "published", true | size }}</div>
+                <div class="stat-label">게시된 공지</div>
+            </div>
+        </div>
+
+        <!-- 검색 기능 -->
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="공지사항 검색..." id="searchInput">
+        </div>
+        
+        <div class="notice-list" id="noticeList">
+            {% assign published_notices = site.notices | where: "published", true | sort: 'date' | reverse %}
+            {% if published_notices.size > 0 %}
+                {% for notice in published_notices %}
+                <div class="notice-item {% if forloop.first %}featured{% endif %}" data-title="{{ notice.title | downcase }}" data-summary="{{ notice.summary | downcase }}">
+                    {% if forloop.first %}
+                    <div class="notice-badge">최신</div>
+                    {% endif %}
+                    
+                    <h2 class="notice-title">
+                        <a href="{{ notice.url | relative_url }}">{{ notice.title }}</a>
+                    </h2>
+                    
+                    <div class="notice-meta">
+                        <span>📅 {{ notice.date | date: "%Y년 %m월 %d일" }}</span>
+                        {% if notice.author %}
+                        <span>✍️ {{ notice.author }}</span>
+                        {% endif %}
+                        <span>🔖 공지사항</span>
+                    </div>
+                    
+                    {% if notice.summary %}
+                    <div class="notice-summary">
+                        {{ notice.summary }}
+                    </div>
+                    {% endif %}
+                    
+                    <a href="{{ notice.url | relative_url }}" class="read-more">
+                        자세히 보기 <span>→</span>
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <h3>📝 아직 공지사항이 없습니다</h3>
+                    <p>첫 번째 공지사항을 작성해보세요!</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
     
-    <a href="/admin" class="admin-btn">관리자</a>
+    <a href="/admin" class="admin-btn">🔧 관리자</a>
 
     <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
+        // Netlify Identity 설정
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
         }
-      });
-    }
+
+        // 검색 기능
+        const searchInput = document.getElementById('searchInput');
+        const noticeList = document.getElementById('noticeList');
+        const notices = document.querySelectorAll('.notice-item');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            
+            notices.forEach(notice => {
+                const title = notice.getAttribute('data-title') || '';
+                const summary = notice.getAttribute('data-summary') || '';
+                
+                if (title.includes(searchTerm) || summary.includes(searchTerm)) {
+                    notice.style.display = 'block';
+                } else {
+                    notice.style.display = searchTerm === '' ? 'block' : 'none';
+                }
+            });
+
+            // 검색 결과가 없을 때 메시지 표시
+            const visibleNotices = Array.from(notices).filter(notice => notice.style.display !== 'none');
+            const existingEmptyMessage = document.querySelector('.search-empty');
+            
+            if (visibleNotices.length === 0 && searchTerm !== '' && !existingEmptyMessage) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'empty-state search-empty';
+                emptyMessage.innerHTML = `
+                    <h3>🔍 검색 결과가 없습니다</h3>
+                    <p>"${searchTerm}"에 대한 공지사항을 찾을 수 없습니다.</p>
+                `;
+                noticeList.appendChild(emptyMessage);
+            } else if (existingEmptyMessage && (visibleNotices.length > 0 || searchTerm === '')) {
+                existingEmptyMessage.remove();
+            }
+        });
+
+        // 페이지 로드 애니메이션
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.notice-item');
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
     </script>
 </body>
 </html>
