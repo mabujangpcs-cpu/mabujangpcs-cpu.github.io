@@ -1,6 +1,3 @@
----
-layout: default
----
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -61,6 +58,23 @@ layout: default
             font-size: 0.9rem;
             margin-top: 5px;
         }
+        .search-box {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
         .notice-list {
             margin-top: 40px;
         }
@@ -115,11 +129,6 @@ layout: default
             font-size: 14px;
             margin-bottom: 15px;
         }
-        .notice-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
         .notice-summary {
             color: #555;
             line-height: 1.6;
@@ -171,22 +180,6 @@ layout: default
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
-        .search-box {
-            margin-bottom: 30px;
-            position: relative;
-        }
-        .search-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e9ecef;
-            border-radius: 25px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        .search-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
         
         /* 반응형 디자인 */
         @media (max-width: 768px) {
@@ -211,6 +204,37 @@ layout: default
                 padding: 12px 20px;
             }
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #667eea;
+        }
     </style>
 </head>
 <body>
@@ -223,11 +247,11 @@ layout: default
         <!-- 공지사항 통계 -->
         <div class="notice-stats">
             <div class="stat-item">
-                <div class="stat-number">{{ site.notices | size }}</div>
+                <div class="stat-number" id="totalNotices">0</div>
                 <div class="stat-label">전체 공지</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">{{ site.notices | where: "published", true | size }}</div>
+                <div class="stat-number" id="publishedNotices">0</div>
                 <div class="stat-label">게시된 공지</div>
             </div>
         </div>
@@ -238,98 +262,94 @@ layout: default
         </div>
         
         <div class="notice-list" id="noticeList">
-            {% assign published_notices = site.notices | where: "published", true | sort: 'date' | reverse %}
-            {% if published_notices.size > 0 %}
-                {% for notice in published_notices %}
-                <div class="notice-item {% if forloop.first %}featured{% endif %}" data-title="{{ notice.title | downcase }}" data-summary="{{ notice.summary | downcase }}">
-                    {% if forloop.first %}
-                    <div class="notice-badge">최신</div>
-                    {% endif %}
-                    
-                    <h2 class="notice-title">
-                        <a href="{{ notice.url | relative_url }}">{{ notice.title }}</a>
-                    </h2>
-                    
-                    <div class="notice-meta">
-                        <span>📅 {{ notice.date | date: "%Y년 %m월 %d일" }}</span>
-                        {% if notice.author %}
-                        <span>✍️ {{ notice.author }}</span>
-                        {% endif %}
-                        <span>🔖 공지사항</span>
-                    </div>
-                    
-                    {% if notice.summary %}
-                    <div class="notice-summary">
-                        {{ notice.summary }}
-                    </div>
-                    {% endif %}
-                    
-                    <a href="{{ notice.url | relative_url }}" class="read-more">
-                        자세히 보기 <span>→</span>
-                    </a>
-                </div>
-                {% endfor %}
-            {% else %}
-                <div class="empty-state">
-                    <h3>📝 아직 공지사항이 없습니다</h3>
-                    <p>첫 번째 공지사항을 작성해보세요!</p>
-                </div>
-            {% endif %}
+            <!-- 공지사항이 여기에 동적으로 로드됩니다 -->
         </div>
     </div>
     
     <a href="/admin" class="admin-btn">🔧 관리자</a>
 
+    <!-- 모달 창 -->
+    <div id="noticeModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent">
+                <!-- 공지사항 상세 내용 -->
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Netlify Identity 설정
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => {
-                        document.location.href = "/admin/";
-                    });
-                }
-            });
-        }
-
-        // 검색 기능
-        const searchInput = document.getElementById('searchInput');
-        const noticeList = document.getElementById('noticeList');
-        const notices = document.querySelectorAll('.notice-item');
-
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase().trim();
-            
-            notices.forEach(notice => {
-                const title = notice.getAttribute('data-title') || '';
-                const summary = notice.getAttribute('data-summary') || '';
-                
-                if (title.includes(searchTerm) || summary.includes(searchTerm)) {
-                    notice.style.display = 'block';
-                } else {
-                    notice.style.display = searchTerm === '' ? 'block' : 'none';
-                }
-            });
-
-            // 검색 결과가 없을 때 메시지 표시
-            const visibleNotices = Array.from(notices).filter(notice => notice.style.display !== 'none');
-            const existingEmptyMessage = document.querySelector('.search-empty');
-            
-            if (visibleNotices.length === 0 && searchTerm !== '' && !existingEmptyMessage) {
-                const emptyMessage = document.createElement('div');
-                emptyMessage.className = 'empty-state search-empty';
-                emptyMessage.innerHTML = `
-                    <h3>🔍 검색 결과가 없습니다</h3>
-                    <p>"${searchTerm}"에 대한 공지사항을 찾을 수 없습니다.</p>
-                `;
-                noticeList.appendChild(emptyMessage);
-            } else if (existingEmptyMessage && (visibleNotices.length > 0 || searchTerm === '')) {
-                existingEmptyMessage.remove();
+        // 공지사항 데이터 (CMS에서 생성된 데이터를 여기에 수동으로 추가)
+        const notices = [
+            {
+                id: 1,
+                title: "aa",
+                date: "2025-09-09",
+                author: "관리자",
+                summary: "첫 번째 공지사항입니다.",
+                content: "이것은 첫 번째 공지사항의 전체 내용입니다. 더 자세한 내용이 여기에 표시됩니다.",
+                published: true
             }
+            // 새로운 공지사항을 여기에 추가하면 됩니다
+        ];
+
+        // DOM이 로드된 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNotices();
+            setupSearch();
+            setupModal();
         });
 
-        // 페이지 로드 애니메이션
-        document.addEventListener('DOMContentLoaded', function() {
+        // 공지사항 로드 함수
+        function loadNotices() {
+            const publishedNotices = notices.filter(notice => notice.published);
+            
+            // 통계 업데이트
+            document.getElementById('totalNotices').textContent = notices.length;
+            document.getElementById('publishedNotices').textContent = publishedNotices.length;
+
+            // 공지사항 목록 생성
+            const noticeList = document.getElementById('noticeList');
+            
+            if (publishedNotices.length === 0) {
+                noticeList.innerHTML = `
+                    <div class="empty-state">
+                        <h3>📝 아직 공지사항이 없습니다</h3>
+                        <p>첫 번째 공지사항을 작성해보세요!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            noticeList.innerHTML = publishedNotices
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map((notice, index) => `
+                    <div class="notice-item ${index === 0 ? 'featured' : ''}" 
+                         data-title="${notice.title.toLowerCase()}" 
+                         data-summary="${notice.summary.toLowerCase()}">
+                        ${index === 0 ? '<div class="notice-badge">최신</div>' : ''}
+                        
+                        <h2 class="notice-title">
+                            <a href="#" onclick="openModal(${notice.id}); return false;">${notice.title}</a>
+                        </h2>
+                        
+                        <div class="notice-meta">
+                            <span>📅 ${formatDate(notice.date)}</span>
+                            <span>✍️ ${notice.author}</span>
+                            <span>🔖 공지사항</span>
+                        </div>
+                        
+                        <div class="notice-summary">
+                            ${notice.summary}
+                        </div>
+                        
+                        <a href="#" onclick="openModal(${notice.id}); return false;" class="read-more">
+                            자세히 보기 <span>→</span>
+                        </a>
+                    </div>
+                `).join('');
+
+            // 애니메이션 효과
             const items = document.querySelectorAll('.notice-item');
             items.forEach((item, index) => {
                 item.style.opacity = '0';
@@ -340,7 +360,98 @@ layout: default
                     item.style.transform = 'translateY(0)';
                 }, index * 100);
             });
-        });
+        }
+
+        // 날짜 포맷 함수
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+        }
+
+        // 검색 기능 설정
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                const notices = document.querySelectorAll('.notice-item');
+                
+                notices.forEach(notice => {
+                    const title = notice.getAttribute('data-title') || '';
+                    const summary = notice.getAttribute('data-summary') || '';
+                    
+                    if (title.includes(searchTerm) || summary.includes(searchTerm)) {
+                        notice.style.display = 'block';
+                    } else {
+                        notice.style.display = searchTerm === '' ? 'block' : 'none';
+                    }
+                });
+
+                // 검색 결과 없음 처리
+                const visibleNotices = Array.from(notices).filter(notice => notice.style.display !== 'none');
+                const existingEmptyMessage = document.querySelector('.search-empty');
+                
+                if (visibleNotices.length === 0 && searchTerm !== '' && !existingEmptyMessage) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'empty-state search-empty';
+                    emptyMessage.innerHTML = `
+                        <h3>🔍 검색 결과가 없습니다</h3>
+                        <p>"${searchTerm}"에 대한 공지사항을 찾을 수 없습니다.</p>
+                    `;
+                    document.getElementById('noticeList').appendChild(emptyMessage);
+                } else if (existingEmptyMessage && (visibleNotices.length > 0 || searchTerm === '')) {
+                    existingEmptyMessage.remove();
+                }
+            });
+        }
+
+        // 모달 설정
+        function setupModal() {
+            const modal = document.getElementById('noticeModal');
+            const closeBtn = document.querySelector('.close');
+
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        // 모달 열기
+        function openModal(noticeId) {
+            const notice = notices.find(n => n.id === noticeId);
+            if (!notice) return;
+
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <h1>${notice.title}</h1>
+                <div class="notice-meta">
+                    <span>📅 ${formatDate(notice.date)}</span>
+                    <span>✍️ ${notice.author}</span>
+                </div>
+                <hr style="margin: 20px 0;">
+                <div class="notice-content" style="line-height: 1.6;">
+                    ${notice.content.replace(/\n/g, '<br>')}
+                </div>
+            `;
+
+            document.getElementById('noticeModal').style.display = 'block';
+        }
+
+        // Netlify Identity 설정
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>
