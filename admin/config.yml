@@ -1,6 +1,6 @@
 backend:
   name: git-gateway
-  branch: main # 또는 master
+  branch: main
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
@@ -11,10 +11,14 @@ collections:
     folder: "_notices"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    editor:
+      preview: false  # 프리뷰 모드 비활성화로 성능 개선
     fields:
-      - {label: "제목", name: "title", widget: "string"}
-      - {label: "작성일", name: "date", widget: "datetime"}
+      - {label: "제목", name: "title", widget: "string", required: true}
+      - {label: "작성일", name: "date", widget: "datetime", required: true}
       - {label: "작성자", name: "author", widget: "string", default: "관리자"}
-      - {label: "요약", name: "summary", widget: "text"}
-      - {label: "내용", name: "body", widget: "markdown"}
+      - {label: "요약", name: "summary", widget: "text", required: false}
+      - {label: "내용", name: "body", widget: "markdown", required: true, 
+         editor_components: [],  # 복잡한 에디터 기능 비활성화
+         modes: ["rich_text"]}   # 리치텍스트 모드만 사용
       - {label: "공개여부", name: "published", widget: "boolean", default: true}
