@@ -1,0 +1,20 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "notices"
+    label: "공지사항"
+    folder: "_notices"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "제목", name: "title", widget: "string"}
+      - {label: "작성일", name: "date", widget: "datetime"}
+      - {label: "작성자", name: "author", widget: "string", default: "관리자"}
+      - {label: "요약", name: "summary", widget: "text"}
+      - {label: "내용", name: "body", widget: "markdown"}
+      - {label: "공개여부", name: "published", widget: "boolean", default: true}
