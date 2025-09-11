@@ -3,529 +3,1254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항 - 모두의티켓</title>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 12px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-        .header p {
-            margin: 10px 0 0 0;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        .notice-stats {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 30px 0;
-        }
-        .stat-item {
-            text-align: center;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-        .search-box {
-            margin-bottom: 30px;
-            position: relative;
-        }
-        .search-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e9ecef;
-            border-radius: 25px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-        .search-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        .notice-list {
-            margin-top: 40px;
-        }
-        .notice-item {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .notice-item:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-        .notice-item.featured {
-            border-left: 4px solid #667eea;
-            background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
-        }
-        .notice-badge {
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: #667eea;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .notice-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #333;
-            margin: 0 0 12px 0;
-            line-height: 1.3;
-        }
-        .notice-title a {
-            text-decoration: none;
-            color: inherit;
-            transition: color 0.3s;
-        }
-        .notice-title a:hover {
-            color: #667eea;
-        }
-        .notice-meta {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: #6c757d;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        .notice-summary {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .read-more {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        .read-more:hover {
-            color: #5a6fd8;
-            gap: 8px;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 12px;
-            border: 2px dashed #dee2e6;
-        }
-        .empty-state h3 {
-            color: #6c757d;
-            margin: 0 0 10px 0;
-        }
-        .empty-state p {
-            color: #adb5bd;
-            margin: 0;
-        }
-        .admin-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-            font-weight: 600;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-        .admin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-        
-        /* 반응형 디자인 */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            .header h1 {
-                font-size: 2rem;
-            }
-            .notice-stats {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .notice-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            .admin-btn {
-                bottom: 20px;
-                right: 20px;
-                padding: 12px 20px;
-            }
-        }
+        <style>
+/* ====== 리셋 ====== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover {
-            color: #667eea;
-        }
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #23272f;
+    overflow-x: hidden;
+    background: #f7f8fa;
+}
+
+/* ====== Hero Section ====== */
+:root{
+    --hero-accent-1:#6C63FF; /* 보라 */
+    --hero-accent-2:#48C9B0; /* 민트 */
+    --hero-text:#23272f;
+    --hero-bg-1:#f7f8fa;
+    --hero-bg-2:#e3e6ee;
+}
+
+.hero {
+  /* 필요 시 안전한 기본값 */
+  --hero-text: #fff;
+  --hero-bg-1: rgba(8, 9, 12, 0.55);  /* 투명도 포함 */
+  --hero-bg-2: rgba(12, 14, 18, 0.35);
+
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: clamp(72px, 10vh, 120px) 0 clamp(48px, 8vh, 80px);
+  color: var(--hero-text);
+
+  /* 올바른 문법 + 레이어별 속성 지정 */
+  background-image:
+    linear-gradient(135deg, var(--hero-bg-1) 60%, var(--hero-bg-2) 100%),
+    url("https://cdn.imweb.me/upload/S202504108a8e61c83d135/89051187a9608.jpg");
+  background-size: auto, cover;       /* 그라데이션, 이미지 */
+  background-position: center, center;
+  background-repeat: repeat, no-repeat;
+
+  animation: heroSectionIntro .9s ease-out both;
+}
+
+@media (max-width: 820px) {
+    .hero {
+        background: linear-gradient(135deg, #e3e6ee 60%, #f7f8fa 100%);
+    }
+}
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(108,99,255,0.08), rgba(72,201,176,0.10));
+    z-index: 0;
+    pointer-events: none;
+}
+.hero-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: min(92vw, 1600px);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(24px, 4vw, 60px);
+    padding-left: clamp(16px, 5vw, 100px);
+    padding-right: clamp(16px, 3vw, 48px);
+}
+.hero-text{ flex:1; min-width: 0; }
+.hero-image{ 
+    flex:1; min-width: 280px; 
+    height: clamp(360px, 45vh, 520px);
+    display:flex; align-items:center; justify-content:center; 
+    position: relative;
+    opacity: 0; transform: translateY(18px) scale(.98);
+    animation: heroImageIn .9s cubic-bezier(.2,.8,.2,1) .25s both;
+}
+.hero h1{
+    font-weight: 900;
+    line-height: 1.15;
+    font-size: clamp(34px, 6vw, 64px);
+    margin: 0 0 clamp(14px, 1.8vw, 22px);
+    background: linear-gradient(45deg,#6C63FF,#48C9B0,#6C63FF);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientText 5s ease-in-out infinite, heroRise .7s ease-out .02s both;
+}
+.hero p{
+    font-size: clamp(16px, 1.6vw, 22px);
+    line-height: 1.6;
+    opacity: 0; transform: translateY(16px);
+    animation: fadeInUp .7s ease .12s both;
+}
+.hero-buttons{
+    display:flex; flex-wrap:wrap; gap: clamp(12px, 1.2vw, 20px);
+    margin-top: clamp(16px, 2.5vw, 36px);
+    opacity:0; transform: translateY(16px);
+    animation: fadeInUp .7s ease .18s both;
+}
+.hero-btn{
+    position: relative; overflow: hidden;
+    display:inline-flex; align-items:center; justify-content:center;
+    padding: clamp(12px, 1.2vw, 18px) clamp(22px, 2.6vw, 40px);
+    border-radius: 999px;
+    font-size: clamp(14px, 1.2vw, 18px);
+    font-weight: 700; text-decoration: none;
+    transition: transform .35s cubic-bezier(.175,.885,.32,1.275), box-shadow .35s ease;
+    will-change: transform, box-shadow;
+}
+.hero-btn-primary{
+    color:#fff;
+    background: linear-gradient(45deg, #6C63FF, #48C9B0);
+    box-shadow: 0 10px 36px rgba(108,99,255,.18);
+}
+.hero-btn-primary::before{
+    content:""; position:absolute; inset:auto;
+    top:50%; left:50%; width:0; height:0;
+    background: rgba(255,255,255,.18); border-radius:50%;
+    transform: translate(-50%,-50%); transition: width .55s, height .55s;
+}
+.hero-btn-primary:hover::before{ width: 280px; height: 280px; }
+.hero-btn-primary:hover{
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 16px 52px rgba(108,99,255,.25);
+}
+
+/* ====== Features Section ====== */
+.features {
+    position: relative;
+    padding: 100px 0;
+    background: #f7f8fa;
+    overflow: hidden;
+}
+.features-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.features-header h2 {
+    font-size: 42px;
+    font-weight: 900;
+    color: #6C63FF;
+    margin-bottom: 12px;
+}
+.features-header .features-subtitle {
+    font-size: 20px;
+    color: #48C9B0;
+}
+.features-capsule {
+    position: relative;
+    background: linear-gradient(90deg, #6C63FF 0%, #48C9B0 100%);
+    border-radius: 999px 0 0 999px;
+    box-shadow: 0 10px 40px rgba(108,99,255,0.08);
+    padding: 80px 5% 80px 10%;
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: 0;
+    color: #fff;
+    opacity: 0;
+    transform: translateX(100vw);
+    transition: opacity 1s, transform 1s cubic-bezier(.2,.8,.2,1);
+}
+.features-capsule.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    margin-top: 0;
+}
+@media (max-width: 820px) {
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+    .features-capsule {
+        border-radius: 40px;
+        padding: 40px 5%;
+    }
+}
+.feature-card {
+    background: rgba(255,255,255,0.10);
+    border-radius: 40px;
+    box-shadow: 0 4px 24px rgba(108,99,255,0.08);
+    padding: 32px 24px;
+    color: #fff;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 2s, transform 1.5s;
+}
+.feature-card .feature-desc {
+    font-size: 18px;
+    color: #fff;
+    line-height: 1.7;
+    margin-top: 12px;
+}
+.features-capsule.animate .feature-card {
+    opacity: 1;
+    transform: translateY(0);
+}
+.features-capsule.animate .feature-card:nth-child(1) { transition-delay: 0.2s; }
+.features-capsule.animate .feature-card:nth-child(2) { transition-delay: 0.4s; }
+.features-capsule.animate .feature-card:nth-child(3) { transition-delay: 0.6s; }
+.features-capsule.animate .feature-card:nth-child(4) { transition-delay: 0.8s; }
+
+/* ====== Feature Summary Section ====== */
+.feature-summary-section {
+    background: #fff;
+    padding: 100px 0;
+}
+.feature-summary-inner {
+    display: flex;
+    align-items: flex-start;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+.feature-summary-left {
+    flex: 0 0 400px;
+    margin-left: 300px;
+    margin-right: 80px;
+}
+.feature-summary-left h2 {
+    font-size: 38px;
+    font-weight: 900;
+    color: #6C63FF;
+    margin-bottom: 18px;
+}
+.feature-summary-desc {
+    font-size: 22px;
+    color: #48C9B0;
+    line-height: 1.7;
+}
+.feature-summary-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    margin-top: 0;
+}
+.feature-summary-item h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #6C63FF;
+    margin-bottom: 8px;
+}
+.feature-summary-item p {
+    font-size: 18px;
+    color: #23272f;
+    line-height: 1.6;
+}
+@media (max-width: 1024px) {
+    .feature-summary-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 98vw;
+        padding: 0 16px;
+    }
+    .feature-summary-left {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 40px;
+    }
+    .feature-summary-right {
+        margin-top: 0;
+    }
+}
+
+/* ====== Center CTA Section ====== */
+.center-cta {
+    width: 100vw;
+    max-width: 1440px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, #6C63FF 0%, #48C9B0 100%);
+    color: #fff;
+    text-align: center;
+    padding: 120px 5vw;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    box-sizing: border-box;
+}
+.point-text {
+    color: #fff;
+    background: linear-gradient(90deg, #fff 0%, #48C9B0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+}
+.center-cta__title {
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 900;
+    margin-bottom: 24px;
+    letter-spacing: -1px;
+}
+.center-cta__subtitle {
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: 600;
+    margin-bottom: 18px;
+    opacity: 0.92;
+}
+.center-cta__desc {
+    font-size: clamp(15px, 2vw, 20px);
+    font-weight: 400;
+    opacity: 0.8;
+    margin-bottom: 0;
+}
+
+/* ====== Step Guide Section ====== */
+.step-guide {
+    background: #f7f8fa;
+    padding: 100px 0 80px 0;
+    text-align: center;
+}
+.step-guide h2 {
+    font-size: 48px;
+    font-weight: 900;
+    margin-bottom: 60px;
+    background: linear-gradient(45deg, #6C63FF, #48C9B0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.step-guide-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(108,99,255,0.08);
+    background: #fff;
+}
+.step-guide-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 28px 44px 28px;
+    position: relative;
+    background: #fff;
+    opacity: 0;
+    transform: translateY(40px);
+}
+.step-guide-row.animate .step-guide-step {
+    animation: stepFadeInUp 1s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.step-guide-row.animate .step-guide-step:nth-child(1) { animation-delay: 0.3s; }
+.step-guide-row.animate .step-guide-step:nth-child(2) { animation-delay: 0.5s; }
+.step-guide-row.animate .step-guide-step:nth-child(3) { animation-delay: 0.7s; }
+.step-guide-row.animate .step-guide-step:nth-child(4) { animation-delay: 0.9s; }
+.step-guide-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 1px;
+    height: calc(100% - 60px);
+    background: linear-gradient(to bottom, #6C63FF 0%, #48C9B0 100%);
+    opacity: 0.18;
+}
+.step-guide-num {
+    font-size: 38px;
+    font-weight: 900;
+    color: #6C63FF;
+    margin-bottom: 18px;
+    letter-spacing: 2px;
+}
+.step-guide-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #23272f;
+    margin-bottom: 14px;
+}
+.step-guide-desc {
+    font-size: 18px;
+    color: #555;
+    line-height: 1.7;
+}
+@media (max-width: 1024px) {
+    .step-guide-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    .step-guide-step:not(:last-child)::after {
+        height: 80%;
+        top: 10%;
+    }
+}
+@media (max-width: 700px) {
+    .step-guide-row {
+        grid-template-columns: 1fr;
+    }
+    .step-guide-step:not(:last-child)::after {
+        width: 80%;
+        height: 1px;
+        left: 10%;
+        right: auto;
+        top: auto;
+        bottom: 0;
+        background: linear-gradient(to right, #6C63FF 0%, #48C9B0 100%);
+    }
+}
+
+/* ====== FAQ Section ====== */
+.faq {
+    padding: 100px 5%;
+    background: linear-gradient(135deg, #f7f8fa 0%, #e3e6ee 100%);
+    position: relative;
+}
+.faq h2 {
+    text-align: center;
+    font-size: 48px;
+    margin-bottom: 60px;
+    background: linear-gradient(45deg, #6C63FF, #48C9B0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+}
+.faq-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+.faq-item {
+    margin-bottom: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(108,99,255,0.08);
+    transition: all 0.4s ease;
+    background: white;
+}
+.faq-item:hover {
+    box-shadow: 0 10px 40px rgba(108,99,255,0.15);
+    transform: translateY(-3px);
+}
+.faq-question {
+    padding: 25px 30px;
+    background: linear-gradient(135deg, #6C63FF 0%, #48C9B0 100%);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.faq-question::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(108,99,255,0.18), transparent);
+    transition: left 0.6s ease;
+}
+.faq-question:hover::before {
+    left: 100%;
+}
+.faq-question:hover {
+    background: linear-gradient(135deg, #48C9B0 0%, #6C63FF 100%);
+}
+.faq-question span {
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+}
+.faq-icon {
+    transition: transform 0.3s ease;
+    font-size: 24px;
+    position: relative;
+    z-index: 2;
+}
+.faq-icon.active {
+    transform: rotate(180deg);
+}
+.faq-answer {
+    padding: 0;
+    background: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.faq-answer.active {
+    padding: 30px;
+    max-height: 500px;
+}
+.faq-answer p {
+    color: #555;
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+/* ====== CTA Section ====== */
+.cta-section {
+    padding: 120px 5%;
+    background: linear-gradient(135deg, #6C63FF 0%, #48C9B0 100%);
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    animation: ctaPulse 4s ease-in-out infinite;
+}
+.cta-contact-info {
+    margin-top: 24px;
+    margin-bottom: 50px;
+}
+@keyframes ctaPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.2); }
+}
+.cta-section h2 {
+    font-size: 52px;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(45deg, #fff, #6C63FF, #48C9B0, #fff);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientText 5s ease infinite;
+    font-weight: 700;
+}
+.cta-section p {
+    font-size: 24px;
+    margin-bottom: 50px;
+    opacity: 0.9;
+    position: relative;
+    z-index: 2;
+}
+.cta-buttons {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+.cta-main {
+    background: linear-gradient(45deg, #6C63FF, #48C9B0);
+    color: white;
+    padding: 20px 50px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 40px rgba(108,99,255,0.18);
+    position: relative;
+    overflow: hidden;
+}
+.cta-main::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.18);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+.cta-main:hover::before {
+    width: 400px;
+    height: 400px;
+}
+.cta-main:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 20px 60px rgba(108,99,255,0.25);
+}
+.cta-secondary {
+    background: transparent;
+    color: white;
+    padding: 20px 50px;
+    border: 3px solid #48C9B0;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 700;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+.cta-secondary::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: #48C9B0;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: -1;
+}
+.cta-secondary:hover::before {
+    width: 100%;
+    height: 100%;
+}
+.cta-secondary:hover {
+    color: #23272f;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(108,99,255,0.18);
+}
+
+/* ====== Footer ====== */
+footer {
+    background: #23272f;
+    color: #fff;
+    padding: 60px 5% 30px;
+    text-align: center;
+    border-top: 1px solid #48C9B0;
+}
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.footer-logo {
+    font-size: 36px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #6C63FF, #48C9B0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+    animation: logoGlow 3s ease-in-out infinite;
+}
+@keyframes logoGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+}
+.footer-info {
+    margin-bottom: 40px;
+    line-height: 2;
+    color: #bfc3d1;
+    font-size: 16px;
+}
+.footer-contact {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #48C9B0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    position: relative;
+}
+.contact-item::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #48C9B0;
+    transition: width 0.3s ease;
+}
+.contact-item:hover::after {
+    width: 100%;
+}
+.contact-item:hover {
+    transform: scale(1.1);
+    color: #6C63FF;
+}
+.footer-bottom {
+    padding-top: 30px;
+    border-top: 1px solid #6C63FF;
+    color: #bfc3d1;
+    font-size: 14px;
+}
+
+/* ====== Achievements Section ====== */
+.achievements {
+    padding: clamp(32px, 6vw, 88px) 0;
+    background: linear-gradient(135deg, #f7f8fa 0%, #e3e6ee 100%);
+}
+.achievements__title {
+    text-align: center;
+    font-size: 48px;
+    font-weight: 900;
+    margin-bottom: 56px;
+    color: #6C63FF;
+    letter-spacing: -1px;
+    background: linear-gradient(45deg, #6C63FF, #48C9B0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.achievements__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: clamp(16px, 3vw, 32px);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.achievements__card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 6px 20px rgba(108,99,255,.08);
+    transition: transform .25s, box-shadow .25s;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    opacity: 0;
+    transform: translateY(40px);
+}
+.achievements__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(108,99,255,.12);
+}
+.achievements__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #e3e6ee;
+    overflow: hidden;
+}
+.achievements__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid #f0f0f0;
+}
+.achievements__badge {
+    position: absolute;
+    bottom: 12px;
+    left: 16px;
+    background: #6C63FF;
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: 0 2px 8px rgba(108,99,255,0.10);
+    letter-spacing: 1px;
+    z-index: 2;
+}
+.achievements__body {
+    padding: clamp(12px, 2vw, 20px);
+    background: #fff;
+}
+.achievements__headline {
+    font-weight: 800;
+    font-size: 22px;
+    margin: 4px 0 6px;
+    color: #6C63FF;
+}
+.achievements__desc {
+    opacity: .85;
+    line-height: 1.6;
+    font-size: 17px;
+    color: #23272f;
+}
+
+/* ====== Animation Keyframes ====== */
+@keyframes heroSectionIntro{
+    from{ opacity:0; transform: translateY(16px); }
+    to{ opacity:1; transform: translateY(0); }
+}
+@keyframes heroRise{
+    from{ opacity:0; transform: translateY(18px); }
+    to{ opacity:1; transform: translateY(0); }
+}
+@keyframes fadeInUp{
+    from{ opacity:0; transform: translateY(20px); }
+    to{ opacity:1; transform: translateY(0); }
+}
+@keyframes heroImageIn{
+    to{ opacity:1; transform: translateY(0) scale(1); }
+}
+@keyframes gradientText{
+    0%,100%{ background-position: 0% 50%; }
+    50%{ background-position: 100% 50%; }
+}
+@keyframes stepFadeInUp {
+    from { opacity: 0; transform: translateY(40px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+@keyframes achievementsFadeUp {
+    from { opacity: 0; transform: translateY(40px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 1024px){
+    .hero-content{ 
+        gap: clamp(18px, 3vw, 28px);
+        padding-left: clamp(16px, 6vw, 56px);
+        max-width: 94vw;
+    }
+    .hero-image{ height: clamp(300px, 40vh, 460px); }
+}
+@media (max-width: 820px){
+    .hero-content{
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: clamp(16px, 6vw, 40px);
+        padding-right: clamp(16px, 6vw, 40px);
+    }
+    .hero-image{ width: 100%; height: clamp(240px, 36vh, 420px); }
+    .hero-buttons{ width: 100%; }
+}
+@media (min-width: 1600px){
+    .hero-content{ padding-left: 48px; padding-right: 48px; }
+}
+@media (prefers-reduced-motion: reduce){
+    .hero, .hero *{ animation: none !important; transition: none !important; }
+}
+@media (max-width: 768px) {
+    .hero h1 { font-size: 36px; }
+    .hero p { font-size: 18px; }
+    .hero-content { flex-direction: column; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+    .cta-main, .cta-secondary { width: 100%; max-width: 300px; }
+    .achievements__title { font-size: 36px; }
+    .achievements__grid { grid-template-columns: 1fr; gap: 28px; }
+}
+@media (max-width: 700px) {
+    .step-guide-row { grid-template-columns: 1fr; }
+    .step-guide-step:not(:last-child)::after {
+        width: 80%;
+        height: 1px;
+        left: 10%;
+        right: auto;
+        top: auto;
+        bottom: 0;
+        background: linear-gradient(to right, #6C63FF 0%, #48C9B0 100%);
+    }
+}
+@media (max-width: 600px) {
+    h2,
+    .features-header h2,
+    .feature-summary-left h2,
+    .achievements__title,
+    .center-cta__title,
+    .step-guide h2,
+    .faq h2,
+    .cta-section h2 {
+        font-size: 32px !important;
+    }
+    p,
+    .features-header .features-subtitle,
+    .feature-summary-desc,
+    .feature-desc,
+    .feature-summary-item p,
+    .achievements__desc,
+    .center-cta__subtitle,
+    .center-cta__desc,
+    .step-guide-title,
+    .step-guide-desc,
+    .faq-answer p,
+    .cta-section p {
+        font-size: 18px !important;
+    }
+    .feature-summary-section {
+        display: none !important;
+    }
+}
+
+/* ====== 모바일 줄바꿈 span ====== */
+.mobile-br {
+    display: none;
+}
+@media (max-width: 600px) {
+    .mobile-br {
+        display: block;
+        height: 0;
+        width: 100%;
+    }
+}
+/* 애니메이션이 적용된 요소가 보이도록 처리 */
+.achievements__card.animated {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    transition: opacity 1s, transform 1s;
+}
+.center-cta.animate {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: opacity 1s, transform 1s;
+}
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📢 모두의티켓 공지사항</h1>
-            <p>최신 소식과 중요한 안내사항을 확인하세요</p>
-        </div>
-
-        <!-- 공지사항 통계 -->
-        <div class="notice-stats">
-            <div class="stat-item">
-                <div class="stat-number" id="totalNotices">0</div>
-                <div class="stat-label">전체 공지</div>
+    <!-- 히어로 섹션 -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>신용카드현금화<br>최고의 선택<br>니모티켓</h1>
+                <p>2025년 업계 1위, 10년 무사고 운영</p>
+                <p>안전하고 빠른 현금화의 새로운 기준</p>
             </div>
-            <div class="stat-item">
-                <div class="stat-number" id="publishedNotices">0</div>
-                <div class="stat-label">게시된 공지</div>
-            </div>
+                      
         </div>
+    </section>
 
-        <!-- 검색 기능 -->
-        <div class="search-box">
-            <input type="text" class="search-input" placeholder="공지사항 검색..." id="searchInput">
-        </div>
-        
-        <div class="notice-list" id="noticeList">
-            <div class="loading">🔄 공지사항을 불러오는 중...</div>
-        </div>
+    <section class="features" id="features">
+    <div class="features-header">
+        <h2>Why Choose 니모티켓?</h2>
+        <p class="features-subtitle">고객님이 니모티켓을 선택하는 이유</p>
     </div>
-    
-    <a href="/admin" class="admin-btn">🔧 관리자</a>
-
-    <!-- 모달 창 -->
-    <div id="noticeModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalContent">
-                <!-- 공지사항 상세 내용 -->
+    <div class="features-capsule">
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3 class="feature-title">초스피드 처리</h3>
+                <p class="feature-desc">신청 후 최대 3분 이내<br> 업고 최고 서비스 속도<br>급한 자금도 즉시 해결</p>
+            </div>
+            <div class="feature-card">
+                <h3 class="feature-title">철벽 보안</h3>
+                <p class="feature-desc">10년간 무사고 운영 실적<br>256bit 암호화 시스템<br>개인정보 완벽 보호</p>
+            </div>
+            <div class="feature-card">
+                <h3 class="feature-title">최저 수수료</h3>
+                <p class="feature-desc">업계 최저 수수료율<br>투명한 수수료 정책<br>숨겨진 비용 없음</p>
+            </div>
+            <div class="feature-card">
+                <h3 class="feature-title">연중무휴 상담</h3>
+                <p class="feature-desc">365일 24시간 운영<br>전문 상담사 대기<br>친절하고 정확한 안내</p>
             </div>
         </div>
     </div>
+</section>
+
+<section class="feature-summary-section">
+    <div class="feature-summary-inner">
+        <div class="feature-summary-left">
+            <h2>신용카드현금화<br> 전문 서비스</h2>
+            <p class="feature-summary-desc">비대면 서비스<br>신용점수 영향 없음</p>
+        </div>
+        <div class="feature-summary-right">
+            <div class="feature-summary-item">
+                <h3>24/7 Support</h3>
+                <p>365일 24시간 친절 상담을 제공합니다.<br>언제든지 고객의 문의에 응답할 준비가 되어 있습니다.</p>
+            </div>
+            <div class="feature-summary-item">
+                <h3>최저수수료 보장</h3>
+                <p>최저 수수료로 서비스를 제공합니다.<br>고객에게 가장 경제적인 선택을 제공합니다.</p>
+            </div>
+            <div class="feature-summary-item">
+                <h3>신용점수 영향 없음</h3>
+                <p>신용점수에 영향을 주지 않으며 안전하게 이용하세요.<br>고객의 신용을 보호하는 서비스를 제공합니다.</p>
+            </div>
+            <div class="feature-summary-item">
+                <h3>편리한 비대면 서비스</h3>
+                <p>비대면으로 편리하게 서비스를 이용하세요.<br>고객의 편의를 최우선으로 생각합니다.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+     <!-- 기존 Service Process 섹션 삭제/교체 -->
+<section id="achievements" class="achievements">
+  <h2 class="achievements__title">Our Achievements</h2>
+  <div class="achievements__grid">
+    <article class="achievements__card">
+      <figure class="achievements__media">
+        <img src="https://cdn.imweb.me/upload/S202504108a8e61c83d135/4a29eb9982a37.jpg" alt="무이자 할부 지원 인포그래픽" loading="lazy" width="640" height="360" />
+        <figcaption class="achievements__badge"><span>01</span></figcaption>
+      </figure>
+      <div class="achievements__body">
+        <h3 class="achievements__headline">무이자 할부 지원</h3>
+        <p class="achievements__desc">모든 고객님께 간편하고 투명한 무이자 할부 서비스를 제공합니다.</p>
+      </div>
+    </article>
+    <article class="achievements__card">
+      <figure class="achievements__media">
+        <img src="https://cdn.imweb.me/upload/S202504108a8e61c83d135/5f0103aeddc5f.jpg" alt="업계 최고속 현금화" loading="lazy" width="640" height="360" />
+        <figcaption class="achievements__badge"><span>02</span></figcaption>
+      </figure>
+      <div class="achievements__body">
+        <h3 class="achievements__headline">업계 최고속 현금화</h3>
+        <p class="achievements__desc">신청 후 최대 10분 이내, 빠르고 안전하게 현금화가 완료됩니다.</p>
+      </div>
+    </article>
+    <article class="achievements__card">
+      <figure class="achievements__media">
+        <img src="https://cdn.imweb.me/upload/S202504108a8e61c83d135/610607a98f526.jpg" alt="24시간 상담 서비스" loading="lazy" width="640" height="360" />
+        <figcaption class="achievements__badge"><span>03</span></figcaption>
+      </figure>
+      <div class="achievements__body">
+        <h3 class="achievements__headline">24시간 상담 서비스</h3>
+        <p class="achievements__desc">365일 24시간, 언제든지 전문 상담사가 친절하게 안내합니다.</p>
+      </div>
+    </article>
+    <article class="achievements__card">
+      <figure class="achievements__media">
+        <img src="https://cdn.imweb.me/upload/S202504108a8e61c83d135/2beb523fbf8fa.png" alt="최저 수수료 보장" loading="lazy" width="640" height="360" />
+        <figcaption class="achievements__badge"><span>04</span></figcaption>
+      </figure>
+      <div class="achievements__body">
+        <h3 class="achievements__headline">최저 수수료 보장</h3>
+        <p class="achievements__desc">업계 최저 수수료로 경제적인 서비스를 약속드립니다.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="center-cta">
+    <h2 class="center-cta__title">
+        지금 바로 <span class="point-text">니모티켓</span>과<span class="mobile-br"></span> 시작하세요!
+    </h2>
+    <p class="center-cta__subtitle">신용카드현금화, 업계 1위의 신뢰와 속도</p>
+    <p class="center-cta__desc">365일 24시간, 언제든 문의하시면<span class="mobile-br"></span> 빠르고 안전하게 안내해드립니다.</p>
+</section>
+
+    <section class="step-guide">
+    <h2>Premium Benefits</h2>
+    <div class="step-guide-row">
+        <div class="step-guide-step">
+            <div class="step-guide-num">01</div>
+            <div class="step-guide-title">간편한 절차</div>
+            <div class="step-guide-desc">복잡한 서류나 보증인 없이 신분증만으로<span class="mobile-br"></span> 간편하게 진행 가능합니다.</div>
+        </div>
+        <div class="step-guide-step">
+            <div class="step-guide-num">02</div>
+            <div class="step-guide-title">정확한 한도 확인</div>
+            <div class="step-guide-desc">카드사별 정확한 한도를 실시간으로<span class="mobile-br"></span> 확인하여 최대 금액을 현금화합니다.</div>
+        </div>
+        <div class="step-guide-step">
+            <div class="step-guide-num">03</div>
+            <div class="step-guide-title">VIP 특별 혜택</div>
+            <div class="step-guide-desc">정기 고객님께는 특별한 VIP 수수료율과<span class="mobile-br"></span> 프리미엄 서비스를 제공합니다.</div>
+        </div>
+        <div class="step-guide-step">
+            <div class="step-guide-num">04</div>
+            <div class="step-guide-title">온라인 24시간 상담</div>
+            <div class="step-guide-desc">365일 24시간 언제든지 친절한 상담과<span class="mobile-br"></span> 신속한 처리를 약속드립니다.</div>
+        </div>
+    </div>
+</section>
+
+    <!-- FAQ 섹션 -->
+    <section class="faq" id="faq">
+        <h2>자주 묻는 질문</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>신용카드현금화가 무엇인가요?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>신용카드의 결제 한도를 이용하여 상품을 구매한 후, 이를 현금으로 전환하는 서비스입니다. 급하게 현금이 필요한 경우 유용하게 이용할 수 있으며, 니모티켓은 합법적이고 안전한 방법으로 서비스를 제공합니다.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>얼마나 빨리 현금을 받을 수 있나요?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>상담 신청 후 최소 5분에서 최대 10분 이내에 현금 입금이 완료됩니다. 은행 점검 시간을 제외하고는 24시간 언제든지 신속한 처리가 가능하며, 긴급한 자금이 필요한 경우 우선 처리해드립니다.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>안전한가요? 불법은 아닌가요?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>니모티켓은 10년간 무사고로 운영되어 온 신뢰할 수 있는 업체입니다. 모든 거래는 합법적인 절차로 진행되며, 고객님의 개인정보는 철저히 보호됩니다. 정식 사업자등록을 완료한 합법 업체입니다.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>어떤 카드가 가능한가요?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>국내 모든 신용카드 및 체크카드 이용이 가능합니다. 신한, 삼성, 현대, 롯데, KB국민, 우리, 하나, NH농협 등 모든 카드사를 지원합니다. 카드사별로 한도와 조건이 다를 수 있으니 상담을 통해 정확한 안내를 받으시기 바랍니다.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>수수료는 얼마인가요?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>업계 최저 수수료를 자랑합니다. 일반 고객 기준 8.5%, 단골 고객 7.5%, VIP 고객 6.5%의 수수료가 적용됩니다. 대량 거래나 장기 고객님께는 추가 할인이 가능하니 상담시 문의해주세요.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA 섹션 -->
+    <section class="cta-section">
+    <h2>지금 바로 시작하세요!</h2>
+    <p>10년 무사고, 업계 1위 니모티켓이 함께합니다</p>
+    <div class="cta-contact-info">
+        <span style="font-weight:700; font-size:20px; color:#00CED1;">대표번호</span>
+        <span style="font-size:22px; font-weight:800; margin-left:12px;">010-5830-9944</span>
+    </div>
+    <div class="cta-buttons">
+        <a href="tel:010-5830-9944" class="cta-main">지금 문의하기</a>
+    </div>
+</section>
+
+    <!-- 푸터 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">NIMO TICKET</div>
+            <div class="footer-info">
+                상호: 니모티켓 | 대표: 김니모<br>
+                사업자등록번호: 123-45-67890<br>
+                주소: 서울특별시 강남구 테헤란로 123 니모빌딩 5층<br>
+                고객센터: 365일 24시간 운영
+            </div>
+            <div class="footer-contact">
+                <a href="tel:010-5830-9944" class="contact-item">
+                    <span>📞</span>
+                    <span>010-5830-9944</span>
+                </a>
+                <a href="tel:010-5830-9944" class="contact-item">
+                    <span>💬</span>
+                    <span>전화/문자 상담하기</span>
+                </a>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 NIMO TICKET. All rights reserved.<span class="mobile-br"></span> 개인정보처리방침 | 이용약관</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        let notices = [];
-
-        // DOM이 로드된 후 실행
-        document.addEventListener('DOMContentLoaded', function() {
-            loadNoticesFromGitHub();
-            setupSearch();
-            setupModal();
-        });
-
-        // GitHub에서 공지사항 파일들을 자동으로 불러오기
-        async function loadNoticesFromGitHub() {
-            try {
-                // GitHub API를 통해 _notices 폴더의 파일 목록 가져오기
-                const response = await fetch('https://api.github.com/repos/mabujangpcs-cpu/mabujangpcs-cpu.github.io/contents/_notices');
-                
-                if (!response.ok) {
-                    throw new Error('GitHub API 요청 실패');
-                }
-                
-                const files = await response.json();
-                
-                // .md 파일들만 필터링
-                const markdownFiles = files.filter(file => file.name.endsWith('.md'));
-                
-                // 각 마크다운 파일의 내용을 불러오기
-                const noticePromises = markdownFiles.map(async (file) => {
-                    const fileResponse = await fetch(file.download_url);
-                    const content = await fileResponse.text();
-                    
-                    // Front matter 파싱
-                    const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-                    
-                    if (frontMatterMatch) {
-                        const frontMatter = frontMatterMatch[1];
-                        const body = frontMatterMatch[2];
-                        
-                        // YAML 파싱 (간단한 방식)
-                        const notice = {
-                            id: file.name.replace('.md', ''),
-                            content: body.trim()
-                        };
-                        
-                        // Front matter에서 필드 추출
-                        const lines = frontMatter.split('\n');
-                        lines.forEach(line => {
-                            const [key, ...valueParts] = line.split(':');
-                            if (key && valueParts.length > 0) {
-                                let value = valueParts.join(':').trim();
-                                // 따옴표 제거
-                                value = value.replace(/^["']|["']$/g, '');
-                                notice[key.trim()] = value;
-                            }
-                        });
-                        
-                        return notice;
-                    }
-                    
-                    return null;
-                });
-                
-                notices = (await Promise.all(noticePromises)).filter(notice => notice !== null);
-                
-                // 공지사항이 성공적으로 로드되면 화면에 표시
-                displayNotices();
-                
-            } catch (error) {
-                console.error('공지사항 로드 실패:', error);
-                
-                // GitHub API 실패시 기본 데이터 사용
-                notices = [
-                    {
-                        id: "2025-09-09-aa",
-                        title: "aa",
-                        date: "2025-09-09",
-                        author: "관리자",
-                        summary: "첫 번째 공지사항입니다.",
-                        content: "이것은 첫 번째 공지사항의 전체 내용입니다. CMS에서 작성된 내용이 여기에 표시됩니다.",
-                        published: true
-                    }
-                ];
-                
-                displayNotices();
-            }
-        }
-
-        // 공지사항 표시 함수
-        function displayNotices() {
-            const publishedNotices = notices.filter(notice => 
-                notice.published === true || notice.published === 'true'
-            );
+        // FAQ 토글 기능
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.faq-icon');
             
-            // 통계 업데이트
-            document.getElementById('totalNotices').textContent = notices.length;
-            document.getElementById('publishedNotices').textContent = publishedNotices.length;
-
-            // 공지사항 목록 생성
-            const noticeList = document.getElementById('noticeList');
+            answer.classList.toggle('active');
+            icon.classList.toggle('active');
             
-            if (publishedNotices.length === 0) {
-                noticeList.innerHTML = `
-                    <div class="empty-state">
-                        <h3>📝 아직 공지사항이 없습니다</h3>
-                        <p>CMS에서 첫 번째 공지사항을 작성해보세요!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            noticeList.innerHTML = publishedNotices
-                .sort((a, b) => new Date(b.date) - new Date(a.date))
-                .map((notice, index) => `
-                    <div class="notice-item ${index === 0 ? 'featured' : ''}" 
-                         data-title="${(notice.title || '').toLowerCase()}" 
-                         data-summary="${(notice.summary || '').toLowerCase()}">
-                        ${index === 0 ? '<div class="notice-badge">최신</div>' : ''}
-                        
-                        <h2 class="notice-title">
-                            <a href="#" onclick="openModal('${notice.id}'); return false;">${notice.title || '제목 없음'}</a>
-                        </h2>
-                        
-                        <div class="notice-meta">
-                            <span>📅 ${formatDate(notice.date)}</span>
-                            <span>✍️ ${notice.author || '작성자 미상'}</span>
-                            <span>🔖 공지사항</span>
-                        </div>
-                        
-                        ${notice.summary ? `
-                        <div class="notice-summary">
-                            ${notice.summary}
-                        </div>
-                        ` : ''}
-                        
-                        <a href="#" onclick="openModal('${notice.id}'); return false;" class="read-more">
-                            자세히 보기 <span>→</span>
-                        </a>
-                    </div>
-                `).join('');
-
-            // 애니메이션 효과
-            const items = document.querySelectorAll('.notice-item');
-            items.forEach((item, index) => {
-                item.style.opacity = '0';
-                item.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    item.style.transition = 'all 0.5s ease';
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
-        }
-
-        // 날짜 포맷 함수
-        function formatDate(dateString) {
-            if (!dateString) return '날짜 미상';
-            const date = new Date(dateString);
-            return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
-        }
-
-        // 검색 기능 설정
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
+            // 다른 FAQ 항목 닫기
+            const allFaqs = document.querySelectorAll('.faq-answer');
+            const allIcons = document.querySelectorAll('.faq-icon');
             
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
-                const notices = document.querySelectorAll('.notice-item');
-                
-                notices.forEach(notice => {
-                    const title = notice.getAttribute('data-title') || '';
-                    const summary = notice.getAttribute('data-summary') || '';
-                    
-                    if (title.includes(searchTerm) || summary.includes(searchTerm)) {
-                        notice.style.display = 'block';
-                    } else {
-                        notice.style.display = searchTerm === '' ? 'block' : 'none';
-                    }
-                });
-
-                // 검색 결과 없음 처리
-                const visibleNotices = Array.from(notices).filter(notice => notice.style.display !== 'none');
-                const existingEmptyMessage = document.querySelector('.search-empty');
-                
-                if (visibleNotices.length === 0 && searchTerm !== '' && !existingEmptyMessage) {
-                    const emptyMessage = document.createElement('div');
-                    emptyMessage.className = 'empty-state search-empty';
-                    emptyMessage.innerHTML = `
-                        <h3>🔍 검색 결과가 없습니다</h3>
-                        <p>"${searchTerm}"에 대한 공지사항을 찾을 수 없습니다.</p>
-                    `;
-                    document.getElementById('noticeList').appendChild(emptyMessage);
-                } else if (existingEmptyMessage && (visibleNotices.length > 0 || searchTerm === '')) {
-                    existingEmptyMessage.remove();
+            allFaqs.forEach((faq, index) => {
+                if (faq !== answer && faq.classList.contains('active')) {
+                    faq.classList.remove('active');
+                    allIcons[index].classList.remove('active');
                 }
             });
         }
 
-        // 모달 설정
-        function setupModal() {
-            const modal = document.getElementById('noticeModal');
-            const closeBtn = document.querySelector('.close');
-
-            closeBtn.onclick = function() {
-                modal.style.display = 'none';
-            }
-
-            window.onclick = function(event) {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            }
-        }
-
-        // 모달 열기
-        function openModal(noticeId) {
-            const notice = notices.find(n => n.id === noticeId);
-            if (!notice) return;
-
-            const modalContent = document.getElementById('modalContent');
-            modalContent.innerHTML = `
-                <h1>${notice.title || '제목 없음'}</h1>
-                <div class="notice-meta">
-                    <span>📅 ${formatDate(notice.date)}</span>
-                    <span>✍️ ${notice.author || '작성자 미상'}</span>
-                </div>
-                <hr style="margin: 20px 0;">
-                <div class="notice-content" style="line-height: 1.6;">
-                    ${(notice.content || '내용이 없습니다.').replace(/\n/g, '<br>')}
-                </div>
-            `;
-
-            document.getElementById('noticeModal').style.display = 'block';
-        }
-
-        // Netlify Identity 설정
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => {
-                        document.location.href = "/admin/";
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
                     });
                 }
             });
-        }
+        });
+        
     </script>
+
+    <script>
+window.addEventListener('DOMContentLoaded', () => {
+    // 기존 feature-capsule 애니메이션
+    const capsule = document.querySelector('.features-capsule');
+    if (capsule) {
+        setTimeout(() => {
+            capsule.classList.add('animate');
+        }, 300);
+    }
+
+    // step-guide 애니메이션 (IntersectionObserver 사용)
+    const stepRow = document.querySelector('.step-guide-row');
+    if (stepRow) {
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    stepRow.classList.add('animate');
+                    io.disconnect();
+                }
+            });
+        }, { threshold: 0.3 });
+        io.observe(stepRow);
+    }
+});
+</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  // 순차 fade-up 애니메이션
+  const cards = document.querySelectorAll('.achievements__card');
+  if (cards.length) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          cards.forEach((card, idx) => {
+            setTimeout(() => {
+              card.classList.add('animated');
+            }, idx * 100);
+          });
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+    io.observe(cards[0]);
+  }
+});
+</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+    const cta = document.querySelector('.center-cta');
+    if (cta) {
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    cta.classList.add('animate');
+                    io.disconnect();
+                }
+            });
+        }, { threshold: 0.3 });
+        io.observe(cta);
+    }
+});
+</script>
+
 </body>
 </html>
